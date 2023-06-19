@@ -10,8 +10,8 @@ def page2():
     with st.form(key='form'):
         option1 = st.selectbox("Select room type",["Bedroom", "livingroom", "Bathroom", "HomeOffice"])
         option2 = st.selectbox("Select Style", 
-                            (['Italian', 'Chinese', 'American', 'Indian']))
-        option3 = st.selectbox("Select Theme", ['Modern', 'Minimalistic', 'Vintage', 'Traditional', 'vibrant', 'Bohemian'])
+                            (['Bohemian', 'Minimalist', 'Contemporary', 'Traditional']))
+        option3 = st.selectbox("Select Theme", ['Tropical', 'Modern', 'Vintage', 'Zen'])
         
         prompt = f"Design a {option1} with a {option2} style and {option3} theme."
         size = st.selectbox('Select size of the images', 

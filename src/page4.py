@@ -5,7 +5,7 @@ from src.utils import get_width_height, resize_image
 from rembg import remove
 
 def page4():
-    st.title("OpenAI DALL·E Image Editing")
+    st.title("GENInteriors")
     st.info("""#### NOTE: you can download image by \
     right clicking on the image and select save image as option""")
 

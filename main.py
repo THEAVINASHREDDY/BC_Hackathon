@@ -12,14 +12,13 @@ openai.api_key = "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"
 
 
 pages = {
-    "Entry point": page1,
-    "Text to image": page2,
+    "Image Generation": page2,
     "Image variation": page3,
     "Image edit": page4
 }
 
 # Create the selectbox in the sidebar
-page = st.sidebar.selectbox("Select a page", list(pages.keys()))
+page = st.sidebar.selectbox("Select a page", list(pages.keys())) 
 
 # Display the selected page
 pages[page]()
