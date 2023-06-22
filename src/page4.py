@@ -2,7 +2,11 @@ import streamlit as st
 import openai
 from PIL import Image
 from src.utils import get_width_height, resize_image
-from rembg import remove
+from rembg import remove 
+from PIL import Image
+from io import BytesIO
+from typing import Tuple
+from pathlib import Path
 
 def page4():
     st.title("GENInteriors")
@@ -24,26 +28,38 @@ def page4():
 
             width, height = get_width_height(size)
 
-            our_image = resize_image(our_image, width, height)
-            mask_image = resize_image(mask_image, width, height)
+           
+            def read_rgba_image(path: Path, resize: Tuple[int, int]) -> bytes:
+                image = Image.open(path)
+                if resize is not None:
+                            image = image.resize(resize)
+                            image = image.convert('RGBA')
+                            bytes_stream = BytesIO()
+                            image.save(bytes_stream, format='PNG')
+                            return bytes_stream.getvalue()
 
-            st.image(our_image, caption="Uploaded image", use_column_width=True)
-            st.image(mask_image, caption="Uploaded mask", use_column_width=True)
+       
 
-            backround_removed_mask = remove(mask_image)
+        our_image_in_bytes = read_rgba_image(path=uploaded_file, resize=(1024, 1024))
+        our_masked_image_in_bytes = read_rgba_image(path=mask_file, resize=(1024, 1024))
 
-            st.image(backround_removed_mask, caption="backround_removed_mask", 
+        st.image(our_image, caption="Uploaded image", use_column_width=True)
+        st.image(mask_image, caption="Uploaded mask", use_column_width=True)
+
+        backround_removed_mask = remove(mask_image)
+
+        st.image(backround_removed_mask, caption="backround_removed_mask", 
                      use_column_width=True)
             
-            response = openai.Image.create_edit(
-                image=our_image,
-                mask=backround_removed_mask,
+        response = openai.Image.create_edit(
+                image=our_image_in_bytes,
+                mask=our_masked_image_in_bytes,
                 prompt=prompt,
                 n=num_images,
                 size=size
             )
 
-            for idx in range(num_images):
+        for idx in range(num_images):
                 image_url = response["data"][idx]["url"]
 
                 st.image(image_url, caption=f"Generated image: {idx+1}",
