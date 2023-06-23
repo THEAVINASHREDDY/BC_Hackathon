@@ -8,7 +8,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-openai.api_key = "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"
+openai.api_key = "**********************"
 
 
 pages = {
